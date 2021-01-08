@@ -3,20 +3,7 @@ require 'byebug'
 require_relative "./ruby_bot"
 require_relative "./bot_answers"
 
-# class TelegramBot 
-#   attr_accessor :min_x, :max_x, :min_y, :max_y, :pos_x, :pox_y
-#   def initialize(session_started, set_desc, set_bot, set_facing, state)
-#     @session_started = session_started
-#     @set_desc = set_desc
-#     @set_bot = set_bot
-#     @set_facing = set_facing
-#     @ruby_bot ||= Bot.new
-#   end
-# end 
-# t_bot = TelegramBot.new(false, false, false, false)
-
-token = '1435528378:AAE0K-L14xBu_mc4sdWd3NfFGJuP4Wc-omc' 
-Telegram::Bot::Client.run(token) do |bot|
+Telegram::Bot::Client.run(ENV["TOKEN"]) do |bot|
   include BotAnswers
   @ruby_bot ||= Bot.new
   bot.listen do |message|
@@ -33,6 +20,7 @@ Telegram::Bot::Client.run(token) do |bot|
           bot.api.sendMessage(chat_id: message.chat.id, text: "Bye")
         else
           if @ruby_bot.session_started && @ruby_bot.desc_x && !@ruby_bot.set_facing
+
             if Bot::ALLOWED_FACINGS.include?(message.text)
               @ruby_bot.facing = message.text
               #bot.api.sendMessage(chat_id: message.chat.id, text: facing(@ruby_bot.facing))
